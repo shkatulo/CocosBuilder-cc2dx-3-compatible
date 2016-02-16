@@ -38,13 +38,18 @@
 @implementation ProjectSettingsGeneratedSpriteSheet
 
 @synthesize isDirty;
+@synthesize packAlgorithm;
+@synthesize npot;
 @synthesize textureFileFormat;
 @synthesize dither;
 @synthesize compress;
+@synthesize nColors;
 @synthesize textureFileFormatAndroid;
 @synthesize ditherAndroid;
+@synthesize nColorsAndroid;
 @synthesize textureFileFormatHTML5;
 @synthesize ditherHTML5;
+@synthesize nColorsHTML5;
 
 - (id)init
 {
@@ -52,6 +57,10 @@
     if (!self) return NULL;
     
     self.isDirty = NO;
+    
+    self.nColors = 256;
+    self.packAlgorithm = 0; // Best short side
+    self.npot = NO;
     
     self.textureFileFormat = 0; // PNG
     self.dither = YES;
@@ -72,16 +81,26 @@
     if (!self) return NULL;
     
     self.isDirty = [[dict objectForKey:@"isDirty"] boolValue];
+    
+    self.packAlgorithm = [[dict objectForKey:@"packAlgorithm"] intValue];
+    self.npot = [[dict objectForKey:@"npot"] boolValue];
 
     self.textureFileFormat = [[dict objectForKey:@"textureFileFormat"] intValue];
     self.dither = [[dict objectForKey:@"dither"] boolValue];
     self.compress = [[dict objectForKey:@"compress"] boolValue];
+    self.nColors = [[dict objectForKey:@"nColors"] intValue];
     
     self.textureFileFormatAndroid = [[dict objectForKey:@"textureFileFormatAndroid"] intValue];
     self.ditherAndroid = [[dict objectForKey:@"ditherAndroid"] boolValue];
+    self.nColorsAndroid = [[dict objectForKey:@"nColorsAndroid"] intValue];
     
     self.textureFileFormatHTML5 = [[dict objectForKey:@"textureFileFormatHTML5"] intValue];
     self.ditherHTML5 = [[dict objectForKey:@"ditherHTML5"] boolValue];
+    self.nColorsHTML5 = [[dict objectForKey:@"nColorsHTML5"] intValue];
+    
+    if (nColors == 0) nColors = 256;
+    if (nColorsAndroid == 0) nColorsAndroid = 256;
+    if (nColorsHTML5 == 0) nColorsHTML5 = 256;
 
     return self;
 }
@@ -92,15 +111,21 @@
     
     [ser setObject:[NSNumber numberWithBool:self.isDirty] forKey:@"isDirty"];
 
+    [ser setObject:[NSNumber numberWithInt:self.packAlgorithm] forKey:@"packAlgorithm"];
+    [ser setObject:[NSNumber numberWithBool:self.npot] forKey:@"npot"];
+    
     [ser setObject:[NSNumber numberWithInt:self.textureFileFormat] forKey:@"textureFileFormat"];
     [ser setObject:[NSNumber numberWithBool:self.dither] forKey:@"dither"];
     [ser setObject:[NSNumber numberWithBool:self.compress] forKey:@"compress"];
+    [ser setObject:[NSNumber numberWithInt:self.nColors] forKey:@"nColors"];
     
     [ser setObject:[NSNumber numberWithInt:self.textureFileFormatAndroid] forKey:@"textureFileFormatAndroid"];
     [ser setObject:[NSNumber numberWithBool:self.ditherAndroid] forKey:@"ditherAndroid"];
+    [ser setObject:[NSNumber numberWithInt:self.nColorsAndroid] forKey:@"nColorsAndroid"];
     
     [ser setObject:[NSNumber numberWithInt:self.textureFileFormatHTML5] forKey:@"textureFileFormatHTML5"];
     [ser setObject:[NSNumber numberWithBool:self.ditherHTML5] forKey:@"ditherHTML5"];
+    [ser setObject:[NSNumber numberWithInt:self.nColorsHTML5] forKey:@"nColorsHTML5"];
 
     return ser;
 }

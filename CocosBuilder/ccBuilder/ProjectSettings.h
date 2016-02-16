@@ -32,22 +32,32 @@
 @interface ProjectSettingsGeneratedSpriteSheet : NSObject
 {
     BOOL isDirty;
+    int packAlgorithm;
+    BOOL npot;
     int textureFileFormat;
     BOOL dither;
     BOOL compress;
+    int nColors;
     int textureFileFormatAndroid;
     BOOL ditherAndroid;
+    int nColorsAndroid;
     int textureFileFormatHTML5;
     BOOL ditherHTML5;
+    int nColorsHTML5;
 }
 @property (nonatomic,assign) BOOL isDirty;
+@property (nonatomic,assign) int packAlgorithm;
+@property (nonatomic,assign) BOOL npot;
 @property (nonatomic,assign) int textureFileFormat;
 @property (nonatomic,assign) BOOL dither;
 @property (nonatomic,assign) BOOL compress;
+@property (nonatomic,assign) int nColors;
 @property (nonatomic,assign) int textureFileFormatAndroid;
 @property (nonatomic,assign) BOOL ditherAndroid;
+@property (nonatomic,assign) int nColorsAndroid;
 @property (nonatomic,assign) int textureFileFormatHTML5;
 @property (nonatomic,assign) BOOL ditherHTML5;
+@property (nonatomic,assign) int nColorsHTML5;
 
 - (id)initWithSerialization:(id)dict;
 - (id)serialize;

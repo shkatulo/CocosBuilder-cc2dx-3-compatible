@@ -28,30 +28,46 @@
 
 - (void) setColor:(NSColor *)color
 {
-    color = [color colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+//    color = [color colorUsingColorSpace:[NSColorSpace genericCMYKColorSpace]];
+//    
+//    CGFloat r, g, b, a;
+//    [color getRed:&r green:&g blue:&b alpha:&a];
+//    
+//    ccColor4F c = ccc4f(r, g, b, a);
+//    
+//    NSValue* colorValue = [NSValue value:&c withObjCType:@encode(ccColor4F)];
+//    [self setPropertyForSelection:colorValue];
+    
     
     CGFloat r, g, b, a;
+    
     [color getRed:&r green:&g blue:&b alpha:&a];
     
     ccColor4F c = ccc4f(r, g, b, a);
     
     NSValue* colorValue = [NSValue value:&c withObjCType:@encode(ccColor4F)];
     [self setPropertyForSelection:colorValue];
-    
 }
 
 - (NSColor*) color
 {
+//    NSValue* colorValue = [self propertyForSelection];
+//    ccColor4F c;
+//    [colorValue getValue:&c];
+//    
+//    return [NSColor colorWithCalibratedRed:c.r green:c.g blue:c.b alpha:c.a];
+    
     NSValue* colorValue = [self propertyForSelection];
     ccColor4F c;
     [colorValue getValue:&c];
     
-    return [NSColor colorWithCalibratedRed:c.r green:c.g blue:c.b alpha:c.a];
+    CGFloat components[] = { c.r, c.g, c.b, c.a };
+    return [NSColor colorWithColorSpace:[NSColorSpace genericRGBColorSpace] components:components count:4];
 }
 
 - (void) setColorVar:(NSColor *)color
 {
-    color = [color colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+    color = [color colorUsingColorSpace:[NSColorSpace genericCMYKColorSpace]];
     
     CGFloat r, g, b, a;
     [color getRed:&r green:&g blue:&b alpha:&a];

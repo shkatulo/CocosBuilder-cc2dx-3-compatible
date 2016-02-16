@@ -32,11 +32,14 @@ enum {
 @property(nonatomic,assign) int padding;
 @property(nonatomic,assign) BOOL dither;
 @property(nonatomic,assign) BOOL compress;
+@property(nonatomic,assign) int packAlgorithm;
+@property(nonatomic,assign) BOOL npot;
+@property(nonatomic,assign) int nColors;
 
 + (Tupac*) tupac;
 
-- (void) createTextureAtlasFromDirectoryPaths:(NSArray *)dirs;
-- (void)createTextureAtlas;
+- (BOOL) createTextureAtlasFromDirectoryPaths:(NSArray *)dirs;
+- (BOOL)createTextureAtlas;
 
 @end
 

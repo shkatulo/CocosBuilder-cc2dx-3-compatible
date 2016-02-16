@@ -68,9 +68,15 @@
     return blend.dst;
 }
 
-- (IBAction)blendNormal:(id)sender
+- (IBAction)blendNormalPremultiplied:(id)sender
 {
     self.blendSrc = GL_ONE;
+    self.blendDst = GL_ONE_MINUS_SRC_ALPHA;
+}
+
+- (IBAction)blendNormalNonPremultiplied:(id)sender
+{
+    self.blendSrc = GL_SRC_ALPHA;
     self.blendDst = GL_ONE_MINUS_SRC_ALPHA;
 }
 

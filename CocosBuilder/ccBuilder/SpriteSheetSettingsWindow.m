@@ -15,12 +15,17 @@
 
 @implementation SpriteSheetSettingsWindow
 
+@synthesize packAlgorithm;
 @synthesize textureFileFormat;
 @synthesize compress;
 @synthesize dither;
+@synthesize nColors;
+@synthesize npot;
 @synthesize textureFileFormatAndroid;
 @synthesize ditherAndroid;
+@synthesize nColorsAndroid;
 @synthesize textureFileFormatHTML5;
+@synthesize nColorsHTML5;
 @synthesize iOSEnabled;
 @synthesize androidEnabled;
 @synthesize HTML5Enabled;
@@ -42,17 +47,23 @@
     [self updateHTML5Settings:nil];
 }
 
+
+
 - (IBAction)updateIOSSettings:(NSPopUpButton *)sender {
     BOOL compressEnabled = [self isCompressable:textureFileFormat] && iOSEnabled;
     [iosCompress setEnabled:compressEnabled];
     if(!compressEnabled){
         [iosCompress setState:NSOffState];
     }
+    
     BOOL ditherEnabled = [self isDitherable:textureFileFormat] && iOSEnabled;
     [iosDither setEnabled:ditherEnabled];
     if(!ditherEnabled){
         [iosDither setState:NSOffState];
     }
+    
+    BOOL is8BitPNG = (textureFileFormat == kTupacImageFormatPNG_8BIT);
+    [iosNColors setEnabled:is8BitPNG];
 }
 
 - (IBAction)updateAndroidSettings:(NSPopUpButton *)sender {
@@ -61,6 +72,9 @@
     if(!ditherEnabled){
         [androidDither setState:NSOffState];
     }
+    
+    BOOL is8BitPNG = (textureFileFormatAndroid == kTupacImageFormatPNG_8BIT);
+    [androidNColors setEnabled:is8BitPNG];
 }
 
 - (IBAction)updateHTML5Settings:(NSPopUpButton *)sender {
@@ -69,6 +83,9 @@
     if(!ditherEnabled){
         [HTML5Dither setState:NSOffState];
     }
+    
+    BOOL is8BitPNG = (textureFileFormatHTML5 == kTupacImageFormatPNG_8BIT);
+    [HTML5NColors setEnabled:is8BitPNG];
 }
 
 - (BOOL)isCompressable:(int)textureFomat {

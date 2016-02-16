@@ -88,9 +88,46 @@
 		</dict>
 	</array>
 	<key>editorClassName</key>
-	<string>CCLayer</string>
+	<string>CCLayerRGBA</string>
 	<key>propertiesOverridden</key>
-	<array/>
+	<array>
+		<dict>
+			<key>defaultSerialization</key>
+			<integer>0</integer>
+			<key>default</key>
+			<integer>255</integer>
+			<key>animatable</key>
+			<true/>
+			<key>displayName</key>
+			<string>Opacity</string>
+			<key>type</key>
+			<string>Byte</string>
+			<key>name</key>
+			<string>opacity</string>
+		</dict>
+		<dict>
+			<key>defaultSerialization</key>
+			<array>
+				<integer>0</integer>
+				<integer>0</integer>
+				<integer>0</integer>
+			</array>
+			<key>default</key>
+			<array>
+				<integer>0</integer>
+				<integer>0</integer>
+				<integer>0</integer>
+			</array>
+			<key>animatable</key>
+			<true/>
+			<key>displayName</key>
+			<string>Color</string>
+			<key>type</key>
+			<string>Color3</string>
+			<key>name</key>
+			<string>color</string>
+		</dict>
+	</array>
 	<key>spriteFrameDrop</key>
 	<dict>
 		<key>className</key>

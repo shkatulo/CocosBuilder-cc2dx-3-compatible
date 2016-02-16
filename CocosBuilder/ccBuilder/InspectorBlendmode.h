@@ -29,7 +29,8 @@
 @property (nonatomic,assign) int blendSrc;
 @property (nonatomic,assign) int blendDst;
 
-- (IBAction)blendNormal:(id)sender;
+- (IBAction)blendNormalPremultiplied:(id)sender;
+- (IBAction)blendNormalNonPremultiplied:(id)sender;
 - (IBAction)blendAdditive:(id)sender;
 
 @end

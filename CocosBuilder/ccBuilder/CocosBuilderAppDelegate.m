@@ -821,8 +821,8 @@ static BOOL hideAllToNextSeparator;
     int chainedId = sequenceHandler.currentSequence.chainedSequenceId;
     
     // Add dummy item
-    NSMenuItem* itemDummy = [[[NSMenuItem alloc] initWithTitle:@"Dummy" action:NULL keyEquivalent:@""] autorelease];
-    [menuTimelineChained addItem:itemDummy];
+//    NSMenuItem* itemDummy = [[[NSMenuItem alloc] initWithTitle:@"Dummy" action:NULL keyEquivalent:@""] autorelease];
+//    [menuTimelineChained addItem:itemDummy];
     
     // Add empty option for chained seq
     NSMenuItem* itemCh = [[[NSMenuItem alloc] initWithTitle: @"No Chained Timeline" action:@selector(menuSetChainedSequence:) keyEquivalent:@""] autorelease];
@@ -3428,12 +3428,17 @@ static BOOL hideAllToNextSeparator;
         SpriteSheetSettingsWindow* wc = [[[SpriteSheetSettingsWindow alloc] initWithWindowNibName:@"SpriteSheetSettingsWindow"] autorelease];
         
         wc.compress = ssSettings.compress;
+        wc.packAlgorithm = ssSettings.packAlgorithm;
+        wc.npot = ssSettings.npot;
         wc.dither = ssSettings.dither;
+        wc.nColors = ssSettings.nColors;
         wc.textureFileFormat = ssSettings.textureFileFormat;
         wc.ditherAndroid = ssSettings.ditherAndroid;
         wc.textureFileFormatAndroid = ssSettings.textureFileFormatAndroid;
+        wc.nColorsAndroid = ssSettings.nColorsAndroid;
         wc.textureFileFormatHTML5 = ssSettings.textureFileFormatHTML5;
         wc.ditherHTML5 = ssSettings.ditherHTML5;
+        wc.nColorsHTML5 = ssSettings.nColorsHTML5;
         wc.iOSEnabled = projectSettings.publishEnablediPhone;
         wc.androidEnabled = projectSettings.publishEnabledAndroid;
         wc.HTML5Enabled = projectSettings.publishEnabledHTML5;
@@ -3442,22 +3447,33 @@ static BOOL hideAllToNextSeparator;
         
         if (success)
         {
-            BOOL settingDirty  = (ssSettings.compress != wc.compress)||
-                                 (ssSettings.dither != wc.dither)||
-                                 (ssSettings.textureFileFormat != wc.textureFileFormat)||
-                                 (ssSettings.ditherAndroid != wc.ditherAndroid)||
-                                 (ssSettings.textureFileFormatAndroid != wc.textureFileFormatAndroid)||
-                                 (ssSettings.textureFileFormatHTML5 != wc.textureFileFormatHTML5)||
-                                 (ssSettings.ditherHTML5 != wc.ditherHTML5);
+            BOOL settingDirty  = ((ssSettings.compress != wc.compress)||
+                                  (ssSettings.packAlgorithm != wc.packAlgorithm)||
+                                  (ssSettings.npot != wc.npot)||
+                                  (ssSettings.dither != wc.dither)||
+                                  (ssSettings.nColors != wc.nColors)||
+                                  (ssSettings.textureFileFormat != wc.textureFileFormat)||
+                                  (ssSettings.ditherAndroid != wc.ditherAndroid)||
+                                  (ssSettings.textureFileFormatAndroid != wc.textureFileFormatAndroid)||
+                                  (ssSettings.nColorsAndroid != wc.nColorsAndroid)||
+                                  (ssSettings.textureFileFormatHTML5 != wc.textureFileFormatHTML5)||
+                                  (ssSettings.ditherHTML5 != wc.ditherHTML5)||
+                                  (ssSettings.nColorsHTML5 != wc.nColorsHTML5));
+            
             if(settingDirty){
                 ssSettings.isDirty = YES;
                 ssSettings.compress = wc.compress;
+                ssSettings.packAlgorithm = wc.packAlgorithm;
+                ssSettings.npot = wc.npot;
                 ssSettings.dither = wc.dither;
+                ssSettings.nColors = wc.nColors;
                 ssSettings.textureFileFormat = wc.textureFileFormat;
                 ssSettings.ditherAndroid = wc.ditherAndroid;
                 ssSettings.textureFileFormatAndroid = wc.textureFileFormatAndroid;
+                ssSettings.nColorsAndroid = wc.nColorsAndroid;
                 ssSettings.textureFileFormatHTML5 = wc.textureFileFormatHTML5;
                 ssSettings.ditherHTML5 = wc.ditherHTML5;
+                ssSettings.nColorsHTML5 = wc.nColorsHTML5;
                 [projectSettings store];
             }
         }

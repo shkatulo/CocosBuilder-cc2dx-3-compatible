@@ -29,6 +29,7 @@
 #import "CCBDocument.h"
 #import "CocosBuilderAppDelegate.h"
 #import "CCNode+NodeInfo.h"
+#import "PlugInNode.h"
 
 @implementation CCBPCCBFile
 
@@ -37,13 +38,16 @@
 - (id) init
 {
     self = [super init];
-    if (!self) return NULL;
-    
+    if (self) {
+    }
     return self;
 }
 
 - (void) setCcbFile:(CCNode *)cf
 {
+    if (ccbFile) {
+        cf.customProperties = ccbFile.customProperties;
+    }
     ccbFile = cf;
     
     [self removeAllChildrenWithCleanup:YES];
@@ -51,9 +55,10 @@
     {
         [self addChild:cf];
         self.contentSize = ccbFile.contentSize;
-        self.anchorPoint = ccbFile.anchorPoint;
-        self.ignoreAnchorPointForPosition = ccbFile.ignoreAnchorPointForPosition;
         cf.anchorPoint = ccp(0,0);
+        
+//        self.anchorPoint = ccbFile.anchorPoint;
+//        self.ignoreAnchorPointForPosition = ccbFile.ignoreAnchorPointForPosition;
     }
     else
     {
@@ -63,23 +68,51 @@
     }
 }
 
-- (id) extraPropForKey:(NSString *)key
-{
-    if ([key isEqualToString:@"customClass"] && ccbFile)
-    {
-        return [ccbFile extraPropForKey:@"customClass"];
-    }
-    else
-    {
-        return [super extraPropForKey:key];
-    }
+//- (id) extraPropForKey:(NSString *)key
+//{
+//    if ([key isEqualToString:@"customClass"] && ccbFile)
+//    {
+//        return [ccbFile extraPropForKey:@"customClass"];
+//    }
+//    else
+//    {
+//        return [super extraPropForKey:key];
+//    }
+//}
+
+- (void)setUserObject:(id)userObject {
+    [super setUserObject:userObject];
+    [self setExtraProp:self.plugIn.nodeClassName forKey:@"customClass"];
 }
+
+- (void)loadCustomPropertyValuesFromSerialization:(id)ser {
+    [super loadCustomPropertyValuesFromSerialization:ser];
+    [self setExtraProp:self.plugIn.nodeClassName forKey:@"customClass"];
+}
+
+- (void) setExtraProp:(id)prop forKey:(NSString *)key {
+    if ([key isEqualToString:@"customClass"])
+        prop = self.plugIn.nodeClassName;
+    
+    [super setExtraProp:prop forKey:key];
+}
+
+
+
+
 
 - (NSMutableArray*) customProperties
 {
     if (!ccbFile) return [NSMutableArray array];
     
     return [ccbFile customProperties];
+}
+
+
+- (void) setCustomProperties:(NSMutableArray *)customProperties {
+    if (!ccbFile) [super setCustomProperties:customProperties];
+    
+    [ccbFile setCustomProperties:customProperties];
 }
 
 @end

@@ -22,6 +22,54 @@
 			<key>displayName</key>
 			<string>Content size</string>
 		</dict>
+		<dict>
+			<key>readOnly</key>
+			<true/>
+			<key>type</key>
+			<string>Check</string>
+			<key>name</key>
+			<string>cascadeOpacityEnabled</string>
+			<key>displayName</key>
+			<string>Cascade opacity</string>
+		</dict>
+		<dict>
+			<key>readOnly</key>
+			<true/>
+			<key>type</key>
+			<string>Check</string>
+			<key>name</key>
+			<string>cascadeColorEnabled</string>
+			<key>displayName</key>
+			<string>Cascade color</string>
+		</dict>
+		<dict>
+			<key>readOnly</key>
+			<true/>
+			<key>defaultSerialization</key>
+			<integer>255</integer>
+			<key>displayName</key>
+			<string>Opacity</string>
+			<key>type</key>
+			<string>Byte</string>
+			<key>name</key>
+			<string>opacity</string>
+		</dict>
+		<dict>
+			<key>readOnly</key>
+			<true/>
+			<key>defaultSerialization</key>
+			<array>
+				<integer>255</integer>
+				<integer>255</integer>
+				<integer>255</integer>
+			</array>
+			<key>displayName</key>
+			<string>Color</string>
+			<key>type</key>
+			<string>Color3</string>
+			<key>name</key>
+			<string>color</string>
+		</dict>
 	</array>
 	<key>editorClassName</key>
 	<string>CCBPParticleSystem</string>

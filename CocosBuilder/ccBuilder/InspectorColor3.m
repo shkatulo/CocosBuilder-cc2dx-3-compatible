@@ -31,8 +31,6 @@
 {
     CGFloat r, g, b, a;
     
-    color = [color colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
-    
     [color getRed:&r green:&g blue:&b alpha:&a];
     
     ccColor3B c = ccc3(r*255, g*255, b*255);
@@ -50,7 +48,8 @@
     ccColor3B c;
     [colorValue getValue:&c];
     
-    return [NSColor colorWithCalibratedRed:c.r/255.0 green:c.g/255.0 blue:c.b/255.0 alpha:1];
+    CGFloat components[] = { c.r/255.0, c.g/255.0, c.b/255.0, 1.0f };
+    return [NSColor colorWithColorSpace:[NSColorSpace genericRGBColorSpace] components:components count:4];
 }
 
 @end

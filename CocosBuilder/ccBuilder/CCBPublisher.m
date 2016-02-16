@@ -559,24 +559,29 @@
             Tupac* packer = [Tupac tupac];
             packer.outputName = spriteSheetFile;
             packer.outputFormat = TupacOutputFormatCocos2D;
+            packer.packAlgorithm = ssSettings.packAlgorithm;
+            packer.npot = ssSettings.npot;
             
             if (targetType == kCCBPublisherTargetTypeIPhone)
             {
                 packer.imageFormat = ssSettings.textureFileFormat;
                 packer.compress = ssSettings.compress;
                 packer.dither = ssSettings.dither;
+                packer.nColors = ssSettings.nColors;
             }
             else if (targetType == kCCBPublisherTargetTypeAndroid)
             {
                 packer.imageFormat = ssSettings.textureFileFormatAndroid;
                 packer.compress = NO;
                 packer.dither = ssSettings.ditherAndroid;
+                packer.nColors = ssSettings.nColorsAndroid;
             }
             else if (targetType == kCCBPublisherTargetTypeHTML5)
             {
                 packer.imageFormat = ssSettings.textureFileFormatHTML5;
                 packer.compress = NO;
                 packer.dither = ssSettings.ditherHTML5;
+                packer.nColors = ssSettings.nColorsHTML5;
             }
             
             // Update progress
@@ -585,7 +590,11 @@
             // Pack texture
             packer.directoryPrefix = subPath;
             packer.border = YES;
-            [packer createTextureAtlasFromDirectoryPaths:srcDirs];
+            BOOL generated = [packer createTextureAtlasFromDirectoryPaths:srcDirs];
+            if (!generated) {
+                [warnings addWarningWithDescription:@"Can not generate sprite sheet. Try to separate sprites to 2 sprite sheets." isFatal:YES];
+                return NO;
+            }
             
             // Set correct modification date
             [CCBFileUtil setModificationDate:srcSpriteSheetDate forFile:[spriteSheetFile stringByAppendingPathExtension:@"plist"]];
@@ -899,14 +908,20 @@
         NSFileManager *fm = [NSFileManager defaultManager];
         NSString* publishDir;
         
-        publishDir = [projectSettings.publishDirectory absolutePathFromBaseDirPath:[projectSettings.projectPath stringByDeletingLastPathComponent]];
-        [fm removeItemAtPath:publishDir error:NULL];
+        if (projectSettings.publishDirectory.length != 0) {
+            publishDir = [projectSettings.publishDirectory absolutePathFromBaseDirPath:[projectSettings.projectPath stringByDeletingLastPathComponent]];
+            [fm removeItemAtPath:publishDir error:NULL];
+        }
         
-        publishDir = [projectSettings.publishDirectoryAndroid absolutePathFromBaseDirPath:[projectSettings.projectPath stringByDeletingLastPathComponent]];
-        [fm removeItemAtPath:publishDir error:NULL];
+        if (projectSettings.publishDirectoryAndroid.length != 0) {
+            publishDir = [projectSettings.publishDirectoryAndroid absolutePathFromBaseDirPath:[projectSettings.projectPath stringByDeletingLastPathComponent]];
+            [fm removeItemAtPath:publishDir error:NULL];
+        }
         
-        publishDir = [projectSettings.publishDirectoryHTML5 absolutePathFromBaseDirPath:[projectSettings.projectPath stringByDeletingLastPathComponent]];
-        [fm removeItemAtPath:publishDir error:NULL];
+        if (projectSettings.publishDirectoryHTML5.length != 0) {
+            publishDir = [projectSettings.publishDirectoryHTML5 absolutePathFromBaseDirPath:[projectSettings.projectPath stringByDeletingLastPathComponent]];
+            [fm removeItemAtPath:publishDir error:NULL];
+        }
     }
     
     if (!runAfterPublishing)

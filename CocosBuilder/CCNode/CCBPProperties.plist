@@ -16,7 +16,7 @@
 		<string>displayFrame</string>
 	</dict>
 	<key>editorClassName</key>
-	<string>CCNode</string>
+	<string>CCNodeRGBA</string>
 	<key>properties</key>
 	<array>
 		<dict>
@@ -162,12 +162,64 @@
 			<string>Tag</string>
 		</dict>
 		<dict>
+			<key>defaultSerialization</key>
+			<integer>255</integer>
+			<key>default</key>
+			<integer>255</integer>
+			<key>animatable</key>
+			<true/>
+			<key>displayName</key>
+			<string>Opacity</string>
+			<key>type</key>
+			<string>Byte</string>
+			<key>name</key>
+			<string>opacity</string>
+		</dict>
+		<dict>
+			<key>defaultSerialization</key>
+			<array>
+				<integer>255</integer>
+				<integer>255</integer>
+				<integer>255</integer>
+			</array>
+			<key>default</key>
+			<array>
+				<integer>255</integer>
+				<integer>255</integer>
+				<integer>255</integer>
+			</array>
+			<key>animatable</key>
+			<true/>
+			<key>displayName</key>
+			<string>Color</string>
+			<key>type</key>
+			<string>Color3</string>
+			<key>name</key>
+			<string>color</string>
+		</dict>
+		<dict>
 			<key>type</key>
 			<string>Check</string>
 			<key>name</key>
 			<string>ignoreAnchorPointForPosition</string>
 			<key>displayName</key>
 			<string>Ignore anchor point</string>
+		</dict>
+		<dict>
+			<key>type</key>
+			<string>Check</string>
+			<key>name</key>
+			<string>cascadeOpacityEnabled</string>
+			<key>displayName</key>
+			<string>Cascade opacity</string>
+		</dict>
+		<dict>
+			<key>type</key>
+			<string>Check</string>
+			<key>name</key>
+			<string>cascadeColorEnabled</string>
+			<key>displayName</key>
+			<string>Cascade color</string>
 		</dict>
 	</array>
 	<key>propertiesOverridden</key>

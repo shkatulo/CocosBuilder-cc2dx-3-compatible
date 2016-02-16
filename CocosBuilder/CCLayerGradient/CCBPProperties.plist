@@ -6,6 +6,8 @@
 	<string>CCLayer</string>
 	<key>canHaveChildren</key>
 	<true/>
+	<key>canBeRootNode</key>
+	<true/>
 	<key>className</key>
 	<string>CCLayerGradient</string>
 	<key>editorClassName</key>
@@ -32,6 +34,34 @@
 			<key>displayName</key>
 			<string>Content size</string>
 		</dict>
+		<dict>
+			<key>readOnly</key>
+			<true/>
+			<key>defaultSerialization</key>
+			<integer>255</integer>
+			<key>displayName</key>
+			<string>Opacity</string>
+			<key>type</key>
+			<string>Byte</string>
+			<key>name</key>
+			<string>opacity</string>
+		</dict>
+		<dict>
+			<key>readOnly</key>
+			<true/>
+			<key>defaultSerialization</key>
+			<array>
+				<integer>255</integer>
+				<integer>255</integer>
+				<integer>255</integer>
+			</array>
+			<key>displayName</key>
+			<string>Color</string>
+			<key>type</key>
+			<string>Color3</string>
+			<key>name</key>
+			<string>color</string>
+		</dict>
 	</array>
 	<key>properties</key>
 	<array>
@@ -46,11 +76,17 @@
 			<true/>
 		</dict>
 		<dict>
+			<key>defaultSerialization</key>
+			<array>
+				<integer>0</integer>
+				<integer>0</integer>
+				<integer>0</integer>
+			</array>
 			<key>default</key>
 			<array>
-				<integer>19</integer>
 				<integer>0</integer>
-				<integer>255</integer>
+				<integer>0</integer>
+				<integer>0</integer>
 			</array>
 			<key>displayName</key>
 			<string>Start color</string>
@@ -72,11 +108,17 @@
 			<string>startOpacity</string>
 		</dict>
 		<dict>
+			<key>defaultSerialization</key>
+			<array>
+				<integer>0</integer>
+				<integer>0</integer>
+				<integer>0</integer>
+			</array>
 			<key>default</key>
 			<array>
-				<integer>255</integer>
-				<integer>33</integer>
-				<integer>249</integer>
+				<integer>0</integer>
+				<integer>0</integer>
+				<integer>0</integer>
 			</array>
 			<key>displayName</key>
 			<string>End color</string>

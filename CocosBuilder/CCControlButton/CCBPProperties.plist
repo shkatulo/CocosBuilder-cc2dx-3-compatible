@@ -29,16 +29,6 @@
 		<dict>
 			<key>readOnly</key>
 			<true/>
-			<key>displayName</key>
-			<string>Selected</string>
-			<key>type</key>
-			<string>Check</string>
-			<key>name</key>
-			<string>selected</string>
-		</dict>
-		<dict>
-			<key>readOnly</key>
-			<true/>
 			<key>type</key>
 			<string>Size</string>
 			<key>name</key>
@@ -213,7 +203,7 @@
 			<key>type</key>
 			<string>SpriteFrame</string>
 			<key>name</key>
-			<string>backgroundSpriteFrame|3</string>
+			<string>backgroundSpriteFrame|4</string>
 		</dict>
 		<dict>
 			<key>displayName</key>
@@ -221,7 +211,34 @@
 			<key>type</key>
 			<string>Color3</string>
 			<key>name</key>
-			<string>titleColor|3</string>
+			<string>titleColor|4</string>
+		</dict>
+		<dict>
+			<key>displayName</key>
+			<string>State Selected</string>
+			<key>type</key>
+			<string>SeparatorSub</string>
+		</dict>
+		<dict>
+			<key>default</key>
+			<array>
+				<string>ccbResources/ccbDefaultImages.plist</string>
+				<string>ccbButtonDisabled.png</string>
+			</array>
+			<key>displayName</key>
+			<string>Sprite frame</string>
+			<key>type</key>
+			<string>SpriteFrame</string>
+			<key>name</key>
+			<string>backgroundSpriteFrame|8</string>
+		</dict>
+		<dict>
+			<key>displayName</key>
+			<string>Title color</string>
+			<key>type</key>
+			<string>Color3</string>
+			<key>name</key>
+			<string>titleColor|8</string>
 		</dict>
 	</array>
 </dict>

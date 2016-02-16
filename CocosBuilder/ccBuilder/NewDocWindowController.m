@@ -108,6 +108,8 @@
 {
     if ([rot isEqualToString:@"CCNode"]) return YES;
     else if ([rot isEqualToString:@"CCLayer"]) return YES;
+    else if ([rot isEqualToString:@"CCLayerColor"]) return YES;
+    else if ([rot isEqualToString:@"CCLayerGradient"]) return YES;
     else return NO;
 }
 

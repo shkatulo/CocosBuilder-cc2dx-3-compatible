@@ -49,7 +49,21 @@ typedef struct _PVRTexHeader
 @implementation Tupac {
 }
 
-@synthesize scale=scale_, border=border_, filenames=filenames_, outputName=outputName_, outputFormat=outputFormat_, imageFormat=imageFormat_, directoryPrefix=directoryPrefix_, maxTextureSize=maxTextureSize_, padding=padding_, dither=dither_, compress=compress_;
+@synthesize
+scale = scale_,
+border = border_,
+filenames = filenames_,
+outputName = outputName_,
+outputFormat = outputFormat_,
+imageFormat = imageFormat_,
+directoryPrefix = directoryPrefix_,
+maxTextureSize = maxTextureSize_,
+padding = padding_,
+dither = dither_,
+compress = compress_,
+packAlgorithm = packAlgorithm_,
+npot = npot_,
+nColors = nColors_;
 
 + (Tupac*) tupac
 {
@@ -63,8 +77,9 @@ typedef struct _PVRTexHeader
         scale_ = 1.0;
         border_ = NO;
         imageFormat_ = kTupacImageFormatPNG;
+        packAlgorithm_ = MaxRectsBinPack::RectBestShortSideFit;
         self.outputFormat = TupacOutputFormatCocos2D;
-        self.maxTextureSize = 2048;
+        self.maxTextureSize = 4096;
         self.padding = 1;
     }
     return self;
@@ -159,7 +174,7 @@ typedef struct _PVRTexHeader
     return NSMakeRect(x, y, wTrimmed, hTrimmed);
 }
 
-- (void)createTextureAtlas
+- (BOOL)createTextureAtlas
 {
     // Create output directory if it doesn't exist
     NSFileManager* fm = [NSFileManager defaultManager];
@@ -187,6 +202,15 @@ typedef struct _PVRTexHeader
         int h = (int)CGImageGetHeight(srcImage);
         
         NSRect trimRect = [self trimmedRectForImage:srcImage];
+        if (trimRect.size.width <= 0) {
+            trimRect.origin.x = 0;
+            trimRect.size.width = w;
+        }
+        if (trimRect.size.height <= 0) {
+            trimRect.origin.y = 0;
+            trimRect.size.height = h;
+        }
+//        NSRect trimRect = NSMakeRect(0, 0, w, h);
         
         if (!colorSpace)
         {
@@ -240,7 +264,7 @@ typedef struct _PVRTexHeader
     std::vector<TPRect> outRects;
     
     BOOL makeSquare = NO;
-    if (self.imageFormat == kTupacImageFormatPVRTC_2BPP || kTupacImageFormatPVRTC_4BPP)
+    if (self.imageFormat == kTupacImageFormatPVRTC_2BPP || self.imageFormat == kTupacImageFormatPVRTC_4BPP)
     {
         makeSquare = YES;
         outH = outW;
@@ -265,7 +289,7 @@ typedef struct _PVRTexHeader
             numImages++;
         }
        
-        bin.Insert(inRects, outRects, MaxRectsBinPack::RectBestShortSideFit);
+        bin.Insert(inRects, outRects, (MaxRectsBinPack::FreeRectChoiceHeuristic)packAlgorithm_);
         
         if (numImages == (int)outRects.size())
         {
@@ -273,25 +297,56 @@ typedef struct _PVRTexHeader
         }
         else
         {
-            outH *= 2;
-            
-            if (makeSquare)
-            {
-                outW = outH;
+            if (outH < outW) {
+                outH *= 2;
             }
-            else
-            {
-                if (outH > self.maxTextureSize)
-                {
-                    outH = 8;
-                    outW *= 2;
+            else {
+                outW *= 2;
+                
+                if (makeSquare) {
+                    outH = outW;
                 }
             }
+//            outH *= 2;
+//            
+//            if (makeSquare)
+//            {
+//                outW = outH;
+//            }
+//            else
+//            {
+//                if (outH > self.maxTextureSize)
+//                {
+//                    outH = 8;
+//                    outW *= 2;
+//                }
+//            }
         }
     }
     
+    
+    // Calculate texture size
+    if (npot_) {
+        int index = 0;
+        int maxX = 0, maxY = 0;
+        
+        while (index < outRects.size()) {
+            int rX = outRects[index].x + outRects[index].width;
+            int bY = outRects[index].y + outRects[index].height;
+            if (rX > maxX) maxX = rX;
+            if (bY > maxY) maxY = bY;
+            ++index;
+        }
+        
+        outW = maxX;
+        outH = maxY;
+    }
+    
+    
+    
     // Create the output graphics context
     CGContextRef dstContext = CGBitmapContextCreate(NULL, outW, outH, 8, outW*32, colorSpace, kCGImageAlphaPremultipliedLast);
+//    CGContextRef dstContext = CGBitmapContextCreate(NULL, maxX, maxY, 8, maxX*32, colorSpace, kCGImageAlphaPremultipliedLast);
     
     // Draw all the individual images
     int index = 0;
@@ -333,7 +388,7 @@ typedef struct _PVRTexHeader
         if (rot)
         {
             // Rotate image 90 degrees
-            CGContextRef rotContext = CGBitmapContextCreate(NULL, w, h, 8, 32*h, colorSpace, kCGImageAlphaPremultipliedLast);
+            CGContextRef rotContext = CGBitmapContextCreate(NULL, w, h, 8, 32*w, colorSpace, kCGImageAlphaPremultipliedLast);
             CGContextSaveGState(rotContext);
             CGContextRotateCTM(rotContext, -M_PI/2);
             CGContextTranslateCTM(rotContext, -h, 0);
@@ -345,7 +400,12 @@ typedef struct _PVRTexHeader
         }
         
         // Draw the image
-        CGContextDrawImage(dstContext, CGRectMake(x, outH-y-h, w, h), srcImage);
+        CGRect drawRect = CGRectMake(x, outH-y-h, w, h);
+//        CGRect drawRect = CGRectMake(x, maxY-y-h, w, h);
+
+//        NSLog(@"%d - %@", (int)outW, NSStringFromRect(drawRect));
+//        CGRect drawRect = CGRectMake(outW / 2 - 10, outH / 2 - 10, outW / 2, outH / 2);
+        CGContextDrawImage(dstContext, drawRect, srcImage);
         
         // Release the image
         CGImageRelease(srcImage);
@@ -356,6 +416,7 @@ typedef struct _PVRTexHeader
     [NSGraphicsContext restoreGraphicsState];
     
     NSString* textureFileName = NULL;
+    
     
     // Export PNG file
     
@@ -382,9 +443,13 @@ typedef struct _PVRTexHeader
     {
         NSTask* pngTask = [[NSTask alloc] init];
         [pngTask setLaunchPath:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"pngquant"]];
+        
         NSMutableArray* args = [NSMutableArray arrayWithObjects:
-                                @"--force", @"--ext", @".png", pngFilename, nil];
-        if (self.dither) [args addObject:@"-dither"];
+                                @"--force", @"--ext", @".png", nil];
+        if (!self.dither) [args addObject:@"--nofs"];
+        [args addObject:@(nColors_).stringValue];
+        [args addObject:pngFilename];
+        
         [pngTask setArguments:args];
         [pngTask launch];
         [pngTask waitUntilExit];
@@ -527,9 +592,11 @@ typedef struct _PVRTexHeader
         fprintf(stderr, "[MO] output format %s not yet supported\n", [self.outputFormat UTF8String]);
         exit(EXIT_FAILURE);
     }
+    
+    return allFitted;
 }
 
-- (void) createTextureAtlasFromDirectoryPaths:(NSArray *)dirs
+- (BOOL) createTextureAtlasFromDirectoryPaths:(NSArray *)dirs
 {
     NSFileManager* fm = [NSFileManager defaultManager];
     
@@ -568,7 +635,7 @@ typedef struct _PVRTexHeader
     
     // Generate the sprite sheet
     self.filenames = absoluteFilepaths;
-    [self createTextureAtlas];
+    return [self createTextureAtlas];
 }
 @end
 
