@@ -1,4 +1,4 @@
-# NOT COMPATIBLE WITH JS-BINDINGS (ONLY FOR C++ PROJECTS)
+# WARNING: Not compatible with JSBindings or Lua (only for C++ projects)
 
 # CocosBuilder
 
